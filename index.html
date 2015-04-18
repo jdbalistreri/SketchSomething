@@ -7,6 +7,9 @@
       canvas {
         border: 1px solid #111;
       }
+      canvas:hover {
+        cursor: crosshair;
+      }
     </style>
   </head>
   <body>
@@ -15,6 +18,8 @@
     <button class="color" data-color="green" type="button" name="button">Green</button>
     <button class="color" data-color="yellow" type="button" name="button">Yellow</button>
     <button class="color" data-color="brown" type="button" name="button">Brown</button>
+    <button class="clear" type="button" name="button">Clear</button>
+
 
     <script charset="utf-8">
       var colorHash = { "purple": "#cb3594",
@@ -23,7 +28,6 @@
                         "brown": "#986928"};
 
       var curColor = colorHash.purple;
-      var clickColor = [];
 
       var canvasDiv = $('#canvasDiv');
       var canvas = document.createElement('canvas');
@@ -36,11 +40,19 @@
       }
       context = canvas.getContext("2d");
       canvas = $(canvas);
+      var paint, clickX, clickY, clickDrag, clickColor;
+      clickX = [];
+      clickY = [];
+      clickDrag = [];
+      clickColor = [];
 
-      var clickX = [];
-      var clickY = [];
-      var clickDrag = [];
-      var paint;
+      var clearCanvas = function () {
+        clickX = [];
+        clickY = [];
+        clickDrag = [];
+        clickColor = [];
+        redraw();
+      };
 
       function addClick(x, y, dragging) {
         clickX.push(x);
@@ -70,14 +82,15 @@
       }
 
       var bindEvents = function () {
+        clearCanvas();
         $("body").on("click", "button.color", changeColor);
+        $("body").on("click", "button.clear", clearCanvas);
       };
 
       var changeColor = function (event) {
         var selectedColor = $(event.currentTarget).data("color");
         curColor = colorHash[selectedColor];
       };
-
 
       canvas.mousedown(function(e) {
         var mouseX = e.pageX - this.offsetLeft;
