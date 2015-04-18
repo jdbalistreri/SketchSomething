@@ -28,6 +28,11 @@
       <button class="size" data-size="11" type="button" name="button">Large</button>
       <button class="size" data-size="15" type="button" name="button">Huge</button>
     </div>
+    <div class="tools">
+      <span>Tools: </span>
+      <button class="tool" data-tool="marker" type="button" name="button">Marker</button>
+      <button class="tool" data-tool="eraser" type="button" name="button">Eraser</button>
+    </div>
     <div class="clear">
       <span>Clear: </span>
       <button class="clear" type="button" name="button">Clear</button>
@@ -42,6 +47,7 @@
 
       var curColor = colorHash.purple;
       var curSize = "5";
+      var curTool = "marker";
 
       var canvasDiv = $('#canvasDiv');
       var canvas = document.createElement('canvas');
@@ -97,6 +103,7 @@
         clearCanvas();
         $("body").on("click", "button.color", changeColor);
         $("body").on("click", "button.size", changeSize);
+        $("body").on("click", "button.tool", changeTool);
         $("body").on("click", "button.clear", clearCanvas);
       };
 
@@ -107,6 +114,10 @@
 
       var changeSize = function (event) {
         curSize = $(event.currentTarget).data("size");
+      };
+
+      var changeTool = function (event) {
+        curTool = $(event.currentTarget).data("tool");
       };
 
       clearCanvas();
