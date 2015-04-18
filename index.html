@@ -14,11 +14,24 @@
   </head>
   <body>
     <div id="canvasDiv"></div>
-    <button class="color" data-color="purple" type="button" name="button">Purple</button>
-    <button class="color" data-color="green" type="button" name="button">Green</button>
-    <button class="color" data-color="yellow" type="button" name="button">Yellow</button>
-    <button class="color" data-color="brown" type="button" name="button">Brown</button>
-    <button class="clear" type="button" name="button">Clear</button>
+    <div class="colors">
+      <span>Colors: </span>
+      <button class="color" data-color="purple" type="button" name="button">Purple</button>
+      <button class="color" data-color="green" type="button" name="button">Green</button>
+      <button class="color" data-color="yellow" type="button" name="button">Yellow</button>
+      <button class="color" data-color="brown" type="button" name="button">Brown</button>
+    </div>
+    <div class="sizes">
+      <span>Sizes: </span>
+      <button class="size" data-size="3" type="button" name="button">Small</button>
+      <button class="size" data-size="5" type="button" name="button">Normal</button>
+      <button class="size" data-size="11" type="button" name="button">Large</button>
+      <button class="size" data-size="15" type="button" name="button">Huge</button>
+    </div>
+    <div class="clear">
+      <span>Clear: </span>
+      <button class="clear" type="button" name="button">Clear</button>
+    </div>
 
 
     <script charset="utf-8">
@@ -28,6 +41,7 @@
                         "brown": "#986928"};
 
       var curColor = colorHash.purple;
+      var curSize = "5";
 
       var canvasDiv = $('#canvasDiv');
       var canvas = document.createElement('canvas');
@@ -40,17 +54,14 @@
       }
       context = canvas.getContext("2d");
       canvas = $(canvas);
-      var paint, clickX, clickY, clickDrag, clickColor;
-      clickX = [];
-      clickY = [];
-      clickDrag = [];
-      clickColor = [];
+      var paint, clickX, clickY, clickDrag, clickColor, clickSize;
 
       var clearCanvas = function () {
         clickX = [];
         clickY = [];
         clickDrag = [];
         clickColor = [];
+        clickSize = [];
         redraw();
       };
 
@@ -59,13 +70,13 @@
         clickY.push(y);
         clickDrag.push(dragging);
         clickColor.push(curColor);
+        clickSize.push(curSize);
       }
 
       function redraw() {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
         context.lineJoin = "round";
-        context.lineWidth = 5;
 
         for (var i = 0; i < clickX.length; i++) {
           context.beginPath();
@@ -76,6 +87,7 @@
           }
           context.lineTo(clickX[i], clickY[i]);
           context.closePath();
+          context.lineWidth = parseInt(clickSize[i]);
           context.strokeStyle = clickColor[i];
           context.stroke();
         }
@@ -84,6 +96,7 @@
       var bindEvents = function () {
         clearCanvas();
         $("body").on("click", "button.color", changeColor);
+        $("body").on("click", "button.size", changeSize);
         $("body").on("click", "button.clear", clearCanvas);
       };
 
@@ -91,6 +104,12 @@
         var selectedColor = $(event.currentTarget).data("color");
         curColor = colorHash[selectedColor];
       };
+
+      var changeSize = function (event) {
+        curSize = $(event.currentTarget).data("size");
+      };
+
+      clearCanvas();
 
       canvas.mousedown(function(e) {
         var mouseX = e.pageX - this.offsetLeft;
