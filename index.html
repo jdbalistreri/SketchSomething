@@ -75,7 +75,11 @@
         clickX.push(x);
         clickY.push(y);
         clickDrag.push(dragging);
-        clickColor.push(curColor);
+        if (curTool == "eraser") {
+          clickColor.push("white");
+        } else {
+          clickColor.push(curColor);
+        }
         clickSize.push(curSize);
       }
 
